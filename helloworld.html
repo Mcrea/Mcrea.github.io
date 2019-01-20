@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+<head>
+<title>Simple app</title>
+<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script type="text/javascript">
+    angular.module('app', []).run(function($rootScope){
+        $rootScope.host='Alex';
+        $rootScope.happy = function(){
+            alert($rootScope.name);
+        }}).controller('MyController', function($scope){
+        var updateClock = function(){
+            $scope.clock = new Date();
+        };
+        setInterval(function(){
+            $scope.$apply(updateClock);
+        }, 1000);
+        updateClock();
+        $scope.drink = 'coco';
+        $scope.sayHello = function(){
+            alert($scope.name);
+        }
+    });
+    angular.module('app').controller('parseController', function($scope, $parse){
+        $scope.$watch('monday', function(newVal, oldVal, scope){
+            if (newVal !== oldVal){
+                var parseFun = $parse(newVal);
+                $scope.parseValue = parseFun(scope);
+            }
+        });
+    });
+    </script>
+</head>
+<body>
+<input type='text' ng-model='name' />
+<br>
+hello {{name}}(ng-model绑定),this is {{host}}
+
+<div ng-controller='MyController'>
+    现在的时间是{{clock}}。<br>
+    今天的密码是{{drink}}。<br>
+    welcome to {{host}} site.
+    <input type='button' value='按这里' ng-click='happy()' />
+</div>
+<div ng-controller='parseController'>
+    <input type='text' ng-model='monday' />
+    <br>
+    解析后的表达式的值为:{{parseValue}}
+</div>
+</body>
+
+</html> 
